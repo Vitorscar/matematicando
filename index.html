@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Matematicando — Geometria Analítica</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--tx:#1b2240;--mut:#6b7390;--bd:#e1e5f0;--ac:#3b4fd8;--ac2:#f59e0b;--ok:#0f9d6b;--bad:#e11d48;--grid:#e6e9f2;--axis:#1b2240;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1224;--card:#181c36;--tx:#eef0fb;--mut:#9aa2c7;--bd:#2a3057;--ac:#8c9bff;--grid:#232850;--axis:#eef0fb}}
+:root[data-theme="dark"]{--bg:#0f1224;--card:#181c36;--tx:#eef0fb;--mut:#9aa2c7;--bd:#2a3057;--ac:#8c9bff;--grid:#232850;--axis:#eef0fb}
+*{box-sizing:border-box}html,body{margin:0}body{background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.top{display:flex;align-items:center;gap:10px;padding:12px 18px;font-weight:700;font-size:20px}.top span{color:var(--ac)}
+.hero{max-width:1100px;margin:0 auto;padding:10px 18px 18px}.hero h1{margin:6px 0;font-size:clamp(26px,5vw,40px);line-height:1.15}.hero p{color:var(--mut);max-width:620px;margin:0 0 14px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.cards button{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;text-align:left;color:var(--tx);font:inherit;cursor:pointer;transition:.15s}.cards button:hover{border-color:var(--ac);transform:translateY(-2px)}.cards b{display:block;font-size:17px}.cards small{color:var(--mut)}
+.ws{max-width:1100px;margin:0 auto;padding:0 18px 30px;display:grid;grid-template-columns:1.25fr 1fr;gap:14px}
+@media(max-width:820px){.ws{grid-template-columns:1fr}}
+.plane{position:relative;background:var(--card);border:1px solid var(--bd);border-radius:16px;overflow:hidden;height:min(70vh,520px);min-height:320px;position:sticky;top:8px}
+canvas{width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+.zb{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px}.zb button{width:36px;height:36px;border-radius:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font-size:18px;cursor:pointer}
+#hud{position:absolute;left:10px;bottom:8px;font-size:12px;color:var(--mut);background:var(--card);padding:2px 8px;border-radius:8px;border:1px solid var(--bd)}
+.panel{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:12px;min-width:0}
+.tabs{display:flex;gap:4px;margin-bottom:12px;overflow-x:auto}.tabs button{flex:1;padding:8px 10px;border:0;border-radius:10px;background:transparent;color:var(--mut);font:inherit;font-weight:600;cursor:pointer;white-space:nowrap}.tabs button.on{background:var(--ac);color:#fff}
+.tab{display:none}.tab.on{display:block}
+input,select{font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:7px 9px;min-width:0;max-width:100%}input.bad{border-color:var(--bad);background:rgba(225,29,72,.1)}
+.row{display:grid;grid-template-columns:48px 1fr 1fr auto;gap:6px;align-items:center;margin-bottom:6px}.row .q{grid-column:2/4;font-size:12px;color:var(--mut);margin-top:-4px}
+.btn{border:0;border-radius:10px;padding:8px 14px;background:var(--ac);color:#fff;font:inherit;font-weight:600;cursor:pointer}.btn.g{background:var(--bg);color:var(--tx);border:1px solid var(--bd)}.x{background:transparent;border:0;color:var(--bad);font-size:20px;cursor:pointer}
+.msg{color:var(--bad);font-size:14px;min-height:20px}
+.seg{display:flex;gap:4px;margin:10px 0}.seg button{flex:1;padding:7px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit;cursor:pointer}.seg button.on{background:var(--ac2);color:#222;border-color:var(--ac2);font-weight:600}
+.out{background:var(--bg);border-radius:12px;padding:10px 12px;margin-top:8px}.out p{margin:4px 0;font-family:Georgia,"Times New Roman",serif;font-size:17px;overflow-x:auto}
+.res{margin-top:8px;padding:10px 12px;border-radius:12px;background:var(--ac);color:#fff;font:700 18px Georgia,serif}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 2px;font-size:.9em}.fr i{font-style:normal;border-bottom:1px solid currentColor;padding:0 3px}
+.fb{margin-top:8px;padding:10px;border-radius:10px;font-size:15px}.fb.ok{background:rgba(15,157,107,.15);color:var(--ok)}.fb.no{background:rgba(225,29,72,.12);color:var(--bad)}
+details{border:1px solid var(--bd);border-radius:12px;padding:8px 12px;margin-bottom:8px}summary{cursor:pointer;font-weight:600}
+label{display:block;font-size:13px;color:var(--mut);margin:8px 0 3px}.flex{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+</style>
+</head>
+<body>
+<div class="top">📐 <div>Matemati<span>cando</span></div></div>
+<section class="hero">
+<h1>Veja a Geometria Analítica acontecer no plano.</h1>
+<p>Digite coordenadas, enxergue os pontos na hora e acompanhe cada conta, passo a passo, junto com o desenho. Baseado nos slides e listas do Prof. Clovis Reis (CEMP).</p>
+<div class="cards">
+<button data-go="pts"><b>📍 Plano</b><small>Pontos e quadrantes</small></button>
+<button data-go="calc"><b>🧮 Calculadora</b><small>Resolução em 2 métodos</small></button>
+<button data-go="ex"><b>✏ Exercícios</b><small>Correção automática</small></button>
+<button data-go="teo"><b>📖 Teoria</b><small>Resumo das aulas</small></button>
+</div></section>
+<main class="ws" id="ws">
+<div class="plane"><canvas id="cv"></canvas><div class="zb"><button id="zi" aria-label="Aproximar">+</button><button id="zo" aria-label="Afastar">−</button><button id="zf" aria-label="Ajustar">⌂</button></div><div id="hud">x = 0, y = 0</div></div>
+<aside class="panel">
+<nav class="tabs"><button data-t="pts" class="on">Pontos</button><button data-t="calc">Calculadora</button><button data-t="ex">Exercícios</button><button data-t="teo">Teoria</button></nav>
+
+<div class="tab on" id="t-pts">
+<div id="rows"></div><div class="flex"><button class="btn" id="add">+ Adicionar ponto</button></div>
+<p class="msg" id="pmsg"></p>
+<p style="color:var(--mut);font-size:14px">Arraste o plano para mover; use a roda do mouse ou os botões para zoom. Decimais aceitam vírgula ou ponto.</p>
+</div>
+
+<div class="tab" id="t-calc">
+<label>Conteúdo</label>
+<select id="mod"><option value="quad">Coordenadas e quadrantes</option><option value="dist" selected>Distância entre dois pontos</option><option value="mid">Ponto médio</option><option value="bary">Baricentro do triângulo</option><option value="align">Alinhamento de 3 pontos</option><option value="area">Área do triângulo</option><option value="line">Equação da reta (determinante)</option></select>
+<div class="flex" id="sels"></div>
+<div class="seg"><button data-m="trad" class="on">Método 1 · Matemático</button><button data-m="vis">Método 2 · Visual</button></div>
+<div id="cout"></div>
+</div>
+
+<div class="tab" id="t-ex">
+<label>Exercício</label><select id="exs"></select>
+<div class="out" id="exq"></div>
+<label>Sua resposta</label>
+<div class="flex" id="exin"></div>
+<div class="flex" style="margin-top:8px"><button class="btn" id="chk">Verificar</button><button class="btn g" id="sol">Ver resolução</button><button class="btn g" id="onp">Ver no plano</button></div>
+<div id="exfb"></div>
+<details style="margin-top:12px"><summary>Criar exercício com os pontos do plano</summary>
+<div class="flex" style="margin-top:8px"><select id="ck"><option value="dist">Distância (A, B)</option><option value="mid">Ponto médio (A, B)</option><option value="bary">Baricentro (A, B, C)</option><option value="align">Alinhamento (A, B, C)</option><option value="area">Área (A, B, C)</option></select><button class="btn" id="cmk">Criar</button></div></details>
+</div>
+
+<div class="tab" id="t-teo">
+<details open><summary>Plano cartesiano e quadrantes</summary><p>Dois eixos perpendiculares: das abscissas (x, horizontal) e das ordenadas (y, vertical). Os quadrantes são numerados no sentido anti-horário. Cada ponto é um par ordenado P = (a, b).</p></details>
+<details><summary>Bissetrizes</summary><p>Passam pela origem e formam 45° com os eixos. Quadrantes ímpares: x = y. Quadrantes pares: x e y opostos (y = −x).</p></details>
+<details><summary>Distância entre 2 pontos</summary><p>Hipotenusa do triângulo retângulo de catetos x<sub>B</sub> − x<sub>A</sub> e y<sub>B</sub> − y<sub>A</sub>:<br><b>d = √((x<sub>B</sub> − x<sub>A</sub>)² + (y<sub>B</sub> − y<sub>A</sub>)²)</b></p></details>
+<details><summary>Ponto médio</summary><p>Divide o segmento ao meio:<br><b>x<sub>m</sub> = (x<sub>A</sub> + x<sub>B</sub>)/2 ; y<sub>m</sub> = (y<sub>A</sub> + y<sub>B</sub>)/2</b></p></details>
+<details><summary>Mediana e baricentro</summary><p>Mediana liga um vértice ao ponto médio do lado oposto. O baricentro G é o encontro das três medianas:<br><b>G = ((x<sub>A</sub>+x<sub>B</sub>+x<sub>C</sub>)/3 , (y<sub>A</sub>+y<sub>B</sub>+y<sub>C</sub>)/3)</b></p></details>
+<details><summary>Condição de alinhamento</summary><p>Três pontos estão alinhados quando o determinante das coordenadas (com coluna de 1) é igual a zero.</p></details>
+<details><summary>Área do triângulo</summary><p><b>A = ½ · |D|</b>, onde D é o determinante dos três vértices.</p></details>
+</div>
+</aside>
+</main>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+/* ===== Lógica matemática (independente da interface) ===== */
+const fmt=n=>Math.abs(n-Math.round(n))<1e-9?String(Math.round(n)):(+n.toFixed(4)).toString().replace('.',',');
+const p=n=>n<0?`(${fmt(n)})`:fmt(n);
+const fr=(a,b)=>`<span class="fr"><i>${a}</i><b style="font-weight:inherit">${b}</b></span>`;
+const sub=s=>`<sub>${s}</sub>`;
+function sq(s){if(Math.abs(s-Math.round(s))<1e-9){s=Math.round(s);let a=1,b=s;for(let k=Math.floor(Math.sqrt(s));k>1;k--)if(s%(k*k)==0){a=k;b=s/(k*k);break}return{t:s==0?'0':b==1?`${a}`:a==1?`√${b}`:`${a}√${b}`,v:Math.sqrt(s)}}return{t:`√${fmt(s)}`,v:Math.sqrt(s)}}
+const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);
+function eqStr(a,b,c){let t='';const add=(k,v)=>{if(Math.abs(k)<1e-12)return;const s=k<0?'−':'+',m=Math.abs(k);t+=(t?` ${s} `:(k<0?'−':''))+((m==1&&v)?'':fmt(m))+v};add(a,'x');add(b,'y');add(c,'');return(t||'0')+' = 0'}
+function quadOf(P){const{x,y}=P;if(x==0&&y==0)return'Origem (0, 0)';if(y==0)return'Sobre o eixo das abscissas (x)';if(x==0)return'Sobre o eixo das ordenadas (y)';return(x>0?(y>0?1:4):(y>0?2:3))+'º quadrante'}
+const det=(A,B,C)=>A.x*B.y+A.y*C.x+B.x*C.y-(C.x*B.y+C.y*A.x+B.x*A.y);
+function detSteps(A,B,C){const t=[`${fmt(A.x)}·${p(B.y)}`,`${fmt(A.y)}·${p(C.x)}`,`${fmt(B.x)}·${p(C.y)}`],n=[`${p(C.x)}·${p(B.y)}`,`${p(C.y)}·${p(A.x)}`,`${p(B.x)}·${p(A.y)}`];
+return[`Determinante (Sarrus, com a coluna de 1): D = ${A.n=='A'?'':''}[x${sub(A.n)}y${sub(B.n)} + y${sub(A.n)}x${sub(C.n)} + x${sub(B.n)}y${sub(C.n)}] − [x${sub(C.n)}y${sub(B.n)} + y${sub(C.n)}x${sub(A.n)} + x${sub(B.n)}y${sub(A.n)}]`,
+`D = [${t.join(' + ')}] − [${n.join(' + ')}]`,`D = ${fmt(A.x*B.y)} + ${fmt(A.y*C.x)} + ${fmt(B.x*C.y)} − (${fmt(C.x*B.y)} + ${fmt(C.y*A.x)} + ${fmt(B.x*A.y)})`]}
+const C={
+quad(A){const q=quadOf(A);let ex=[];if(A.x==A.y&&A.x!=0)ex.push('Está sobre a bissetriz dos quadrantes ímpares (x = y).');if(A.x==-A.y&&A.x!=0)ex.push('Está sobre a bissetriz dos quadrantes pares (y = −x).');
+return{trad:[`${A.n} = (${fmt(A.x)}, ${fmt(A.y)})`,`Abscissa x = ${fmt(A.x)} (${A.x>0?'positiva':A.x<0?'negativa':'nula'})`,`Ordenada y = ${fmt(A.y)} (${A.y>0?'positiva':A.y<0?'negativa':'nula'})`,...ex],res:q,vis:[`Parta da origem: ${fmt(Math.abs(A.x))} unidade(s) ${A.x>=0?'à direita':'à esquerda'} e ${fmt(Math.abs(A.y))} ${A.y>=0?'para cima':'para baixo'}.`,`O ponto cai em: ${q}.`],ov:{legs:[{x:0,y:0},{x:A.x,y:0},A]}}},
+dist(A,B){const dx=B.x-A.x,dy=B.y-A.y,s=dx*dx+dy*dy,r=sq(s),n=A.n+B.n;
+return{val:r.v,trad:[`d${sub(n)} = √((x${sub(B.n)} − x${sub(A.n)})² + (y${sub(B.n)} − y${sub(A.n)})²)`,`d${sub(n)} = √((${fmt(B.x)} − ${p(A.x)})² + (${fmt(B.y)} − ${p(A.y)})²)`,`d${sub(n)} = √((${fmt(dx)})² + (${fmt(dy)})²)`,`d${sub(n)} = √(${fmt(dx*dx)} + ${fmt(dy*dy)}) = √${fmt(s)}`],res:`d${sub(n)} = ${r.t}`+(r.t!=fmt(r.v)?` ≈ ${fmt(r.v)}`:''),
+vis:[`O segmento ${n} é a hipotenusa de um triângulo retângulo.`,`Cateto horizontal: |Δx| = ${fmt(Math.abs(dx))}`,`Cateto vertical: |Δy| = ${fmt(Math.abs(dy))}`,`Pitágoras: ${fmt(dx*dx)} + ${fmt(dy*dy)} = ${fmt(s)}, logo d = ${r.t}.`],ov:{segs:[[A,B]],legs:[A,{x:B.x,y:A.y},B]}}},
+mid(A,B){const x=(A.x+B.x)/2,y=(A.y+B.y)/2,M={n:'M',x,y};
+return{val:[x,y],trad:[`x${sub('m')} = ${fr(`x${sub(A.n)} + x${sub(B.n)}`,2)} = ${fr(`${fmt(A.x)} + ${p(B.x)}`,2)} = ${fr(fmt(A.x+B.x),2)} = ${fmt(x)}`,`y${sub('m')} = ${fr(`y${sub(A.n)} + y${sub(B.n)}`,2)} = ${fr(`${fmt(A.y)} + ${p(B.y)}`,2)} = ${fr(fmt(A.y+B.y),2)} = ${fmt(y)}`],res:`M = (${fmt(x)}, ${fmt(y)})`,
+vis:[`M divide o segmento ${A.n}${B.n} ao meio.`,`Está à mesma distância de ${A.n} e de ${B.n}: ${fmt(Math.hypot(B.x-A.x,B.y-A.y)/2)} de cada lado.`],ov:{segs:[[A,B]],pts:[M]}}},
+bary(A,B,Cc){const x=(A.x+B.x+Cc.x)/3,y=(A.y+B.y+Cc.y)/3,G={n:'G',x,y},mp=(P,Q,n)=>({n,x:(P.x+Q.x)/2,y:(P.y+Q.y)/2});
+const MA=mp(B,Cc,'Ma'),MB=mp(A,Cc,'Mb'),MC=mp(A,B,'Mc');
+return{val:[x,y],trad:[`x${sub('G')} = ${fr(`x${sub(A.n)}+x${sub(B.n)}+x${sub(Cc.n)}`,3)} = ${fr(`${fmt(A.x)}+${p(B.x)}+${p(Cc.x)}`,3)} = ${fmt(x)}`,`y${sub('G')} = ${fr(`y${sub(A.n)}+y${sub(B.n)}+y${sub(Cc.n)}`,3)} = ${fr(`${fmt(A.y)}+${p(B.y)}+${p(Cc.y)}`,3)} = ${fmt(y)}`],res:`G = (${fmt(x)}, ${fmt(y)})`,
+vis:['As três medianas ligam cada vértice ao ponto médio do lado oposto.','O baricentro G é onde elas se encontram.'],ov:{poly:[A,B,Cc],segs:[[A,MA],[B,MB],[Cc,MC]],pts:[G]}}},
+align(A,B,Cc){const D=det(A,B,Cc),ok=Math.abs(D)<1e-9;
+return{val:ok,trad:[...detSteps(A,B,Cc),`D = ${fmt(D)}`],res:ok?'D = 0 → os pontos estão alinhados':`D = ${fmt(D)} ≠ 0 → não estão alinhados`,vis:ok?['Os três pontos ficam sobre uma mesma reta (D = 0).','Não há triângulo: a área é zero.']:['Os pontos formam um triângulo.','Como D ≠ 0, não estão alinhados.'],ov:ok?{line:lineOf(A,B)}:{poly:[A,B,Cc]}}},
+area(A,B,Cc){const D=det(A,B,Cc),ar=Math.abs(D)/2;
+return{val:ar,trad:[...detSteps(A,B,Cc),`D = ${fmt(D)}`,`A = ${fr(1,2)} · |D| = ${fr(1,2)} · |${fmt(D)}| = ${fmt(ar)}`],res:`Área = ${fmt(ar)} u.a.`+(ar==0?' (pontos alinhados)':''),vis:['O triângulo ABC está destacado no plano.',`A área é metade do módulo do determinante: ${fmt(ar)} unidades de área.`],ov:{poly:[A,B,Cc]}}},
+line(A,B){let a=A.y-B.y,b=B.x-A.x,c=A.x*B.y-B.x*A.y;if(Math.abs(a)<1e-12&&Math.abs(b)<1e-12)return{err:'Os pontos são iguais: não definem uma reta.'};
+const ints=[a,b,c].every(Number.isInteger);if(ints){const g=gcd(gcd(a,b),c)||1;a/=g;b/=g;c/=g}if(a<0||(a==0&&b<0)){a=-a;b=-b;c=-c}
+const red=Math.abs(b)>1e-12?`Forma reduzida: y = ${fmt(-a/b)}x ${-c/b<0?'−':'+'} ${fmt(Math.abs(c/b))}  (m = ${fmt(-a/b)})`:`Reta vertical: x = ${fmt(-c/a)}`;
+return{trad:[`| x  y  1 ; x${sub(A.n)} y${sub(A.n)} 1 ; x${sub(B.n)} y${sub(B.n)} 1 | = 0`,`x·${p(A.y)} + y·${p(B.x)} + ${p(A.x)}·${p(B.y)} − ${p(B.x)}·${p(A.y)} − ${p(B.y)}·x − ${p(A.x)}·y = 0`,`Agrupando: ${eqStr(a,b,c)}`,red],res:`Reta: ${eqStr(a,b,c)}`,vis:['A reta passa pelos dois pontos e se estende nos dois sentidos.',red],ov:{line:[a,b,c],segs:[]}}}};
+function lineOf(A,B){const a=A.y-B.y,b=B.x-A.x,c=A.x*B.y-B.x*A.y;return(a||b)?[a,b,c]:null}
+const NEED={quad:1,dist:2,mid:2,bary:3,align:3,area:3,line:2};
+/* ===== Estado ===== */
+const COL=['#3b4fd8','#e11d48','#0f9d6b','#d97706','#7c3aed','#0891b2'];
+let uid=0,pts=[{id:++uid,n:'A',x:2,y:3},{id:++uid,n:'B',x:6,y:6},{id:++uid,n:'C',x:5,y:-2}].map(o=>({...o,t0:performance.now()}));
+let mode='trad',ov=null,sel=[],view=null;
+const parse=s=>{s=String(s).trim().replace(',','.');return s!==''&&isFinite(s)?Number(s):NaN};
+const nextName=()=>{for(const c of'ABCDEFGHIJKLMNOPQRSTUVWXYZ')if(!pts.some(q=>q.n==c))return c;return'P'+uid};
+/* ===== Plano ===== */
+const cv=$('#cv'),ctx=cv.getContext('2d');let W=0,H=0;
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const X=x=>view.ox+x*view.s,Y=y=>view.oy-y*view.s;
+function fit(){const r=cv.getBoundingClientRect();W=r.width;H=r.height;let a=0,b=0,c=0,d=0;pts.forEach(q=>{a=Math.min(a,q.x);b=Math.max(b,q.x);c=Math.min(c,q.y);d=Math.max(d,q.y)});
+const s=Math.max(8,Math.min(80,Math.min(W/(b-a+4),H/(d-c+4))));view={s,ox:W/2-(a+b)/2*s,oy:H/2+(c+d)/2*s}}
+function draw(){const r=cv.getBoundingClientRect(),dpr=devicePixelRatio||1;if(Math.round(r.width*dpr)!=cv.width||Math.round(r.height*dpr)!=cv.height){cv.width=Math.round(r.width*dpr);cv.height=Math.round(r.height*dpr)}
+ctx.setTransform(dpr,0,0,dpr,0,0);W=r.width;H=r.height;if(!view)fit();ctx.clearRect(0,0,W,H);
+const tx=css('--tx'),mut=css('--mut'),grid=css('--grid'),ac2=css('--ac2');const raw=50/view.s,pw=10**Math.floor(Math.log10(raw)),step=[1,2,5,10].map(m=>m*pw).find(v=>v>=raw);
+const x0=-view.ox/view.s,x1=(W-view.ox)/view.s,y0=(view.oy-H)/view.s,y1=view.oy/view.s;
+ctx.lineWidth=1;ctx.strokeStyle=grid;ctx.beginPath();
+for(let x=Math.ceil(x0/step)*step;x<=x1;x+=step){ctx.moveTo(X(x),0);ctx.lineTo(X(x),H)}
+for(let y=Math.ceil(y0/step)*step;y<=y1;y+=step){ctx.moveTo(0,Y(y));ctx.lineTo(W,Y(y))}ctx.stroke();
+/* quadrantes */
+ctx.font='600 15px system-ui';ctx.textAlign='center';ctx.fillStyle=mut;ctx.globalAlpha=.45;
+[[1,1],[-1,1],[-1,-1],[1,-1]].forEach(([sx,sy],i)=>{const xa=sx>0?Math.max(view.ox,0):0,xb=sx>0?W:Math.min(view.ox,W),ya=sy>0?0:Math.max(view.oy,0),yb=sy>0?Math.min(view.oy,H):H;if(xb-xa>70&&yb-ya>40)ctx.fillText(['1º Q','2º Q','3º Q','4º Q'][i],(xa+xb)/2,(ya+yb)/2)});ctx.globalAlpha=1;
+/* eixos */
+const ax=Math.min(Math.max(view.ox,0),W),ay=Math.min(Math.max(view.oy,0),H);ctx.strokeStyle=tx;ctx.lineWidth=1.6;ctx.beginPath();ctx.moveTo(0,ay);ctx.lineTo(W,ay);ctx.moveTo(ax,0);ctx.lineTo(ax,H);ctx.stroke();
+ctx.fillStyle=tx;ctx.font='12px system-ui';ctx.fillText('x',W-10,ay-8);ctx.fillText('y',ax+10,12);
+ctx.fillStyle=mut;ctx.textAlign='center';for(let x=Math.ceil(x0/step)*step;x<=x1;x+=step){if(Math.abs(x)<step/2)continue;ctx.fillText(fmt(x),X(x),Math.min(Math.max(ay+14,12),H-4))}
+ctx.textAlign='right';for(let y=Math.ceil(y0/step)*step;y<=y1;y+=step){if(Math.abs(y)<step/2)continue;ctx.fillText(fmt(y),Math.min(Math.max(ax-5,26),W-4),Y(y)+4)}ctx.fillText('0',ax-5,ay+14);
+/* sobreposição (Método 2) */
+if(ov&&mode=='vis'){ctx.strokeStyle=ac2;ctx.fillStyle=ac2;ctx.lineWidth=2.5;
+if(ov.poly){ctx.globalAlpha=.2;ctx.beginPath();ov.poly.forEach((q,i)=>i?ctx.lineTo(X(q.x),Y(q.y)):ctx.moveTo(X(q.x),Y(q.y)));ctx.closePath();ctx.fill();ctx.globalAlpha=1;ctx.stroke()}
+if(ov.line){const[a,b,c]=ov.line;ctx.beginPath();if(Math.abs(b)>1e-12){ctx.moveTo(0,Y((-c-a*x0)/b));ctx.lineTo(W,Y((-c-a*x1)/b))}else{ctx.moveTo(X(-c/a),0);ctx.lineTo(X(-c/a),H)}ctx.stroke()}
+(ov.segs||[]).forEach(([q,r])=>{ctx.beginPath();ctx.moveTo(X(q.x),Y(q.y));ctx.lineTo(X(r.x),Y(r.y));ctx.stroke()});
+if(ov.legs){ctx.setLineDash([6,5]);ctx.lineWidth=1.8;ctx.strokeStyle=css('--ac');ctx.beginPath();ov.legs.forEach((q,i)=>i?ctx.lineTo(X(q.x),Y(q.y)):ctx.moveTo(X(q.x),Y(q.y)));ctx.stroke();ctx.setLineDash([])}}
+if(ov&&ov.pts)ov.pts.forEach(q=>{ctx.fillStyle=ac2;ctx.beginPath();ctx.arc(X(q.x),Y(q.y),6,0,7);ctx.fill();ctx.fillStyle=tx;ctx.textAlign='left';ctx.font='700 13px system-ui';ctx.fillText(`${q.n} (${fmt(q.x)}, ${fmt(q.y)})`,X(q.x)+9,Y(q.y)+18)});
+/* pontos */
+let anim=false;const now=performance.now();pts.forEach((q,i)=>{let k=Math.min(1,(now-q.t0)/450);if(k<1)anim=true;k=1-(1-k)**3;const sx=X(q.x),sy=Y(q.y);ctx.fillStyle=COL[i%6];ctx.globalAlpha=k;ctx.beginPath();ctx.arc(sx,sy,7*k,0,7);ctx.fill();ctx.lineWidth=2;ctx.strokeStyle=css('--card');ctx.stroke();
+ctx.fillStyle=tx;ctx.textAlign='left';ctx.font='700 13px system-ui';ctx.fillText(`${q.n}(${fmt(q.x)}, ${fmt(q.y)})`,sx+10,sy-9);ctx.globalAlpha=1});
+if(anim)requestAnimationFrame(draw)}
+function zoom(f,cx=W/2,cy=H/2){const s=Math.min(400,Math.max(4,view.s*f));f=s/view.s;view.ox=cx-(cx-view.ox)*f;view.oy=cy-(cy-view.oy)*f;view.s=s;draw()}
+$('#zi').onclick=()=>zoom(1.3);$('#zo').onclick=()=>zoom(1/1.3);$('#zf').onclick=()=>{fit();draw()};
+cv.addEventListener('wheel',e=>{e.preventDefault();const r=cv.getBoundingClientRect();zoom(e.deltaY<0?1.15:1/1.15,e.clientX-r.left,e.clientY-r.top)},{passive:false});
+let drag=null;cv.onpointerdown=e=>{drag={x:e.clientX,y:e.clientY};cv.setPointerCapture(e.pointerId);cv.style.cursor='grabbing'};cv.onpointerup=()=>{drag=null;cv.style.cursor='grab'};
+cv.onpointermove=e=>{const r=cv.getBoundingClientRect();if(drag){view.ox+=e.clientX-drag.x;view.oy+=e.clientY-drag.y;drag={x:e.clientX,y:e.clientY};draw()}
+$('#hud').textContent=`x = ${fmt(Math.round((e.clientX-r.left-view.ox)/view.s*100)/100)}, y = ${fmt(Math.round((view.oy-e.clientY+r.top)/view.s*100)/100)}`};
+new ResizeObserver(draw).observe(cv);
+/* ===== Pontos ===== */
+function rows(){$('#rows').innerHTML=pts.map((q,i)=>`<div class="row" data-id="${q.id}"><input value="${q.n}" data-k="n" maxlength="3" style="color:${COL[i%6]};font-weight:700"><input value="${fmt(q.x)}" data-k="x" inputmode="decimal" aria-label="x de ${q.n}"><input value="${fmt(q.y)}" data-k="y" inputmode="decimal" aria-label="y de ${q.n}"><button class="x" data-del="${q.id}" aria-label="Remover">×</button><div class="q">${quadOf(q)}</div></div>`).join('')}
+$('#rows').oninput=e=>{const t=e.target,row=t.closest('.row'),q=pts.find(o=>o.id==row.dataset.id),k=t.dataset.k;if(!q||!k)return;
+if(k=='n'){q.n=t.value.trim()||'?'}else{const v=parse(t.value);if(isNaN(v)){t.classList.add('bad');$('#pmsg').textContent='Valor inválido: digite apenas números (ex.: -2, 3,5).';return}t.classList.remove('bad');q[k]=v}
+$('#pmsg').textContent='';row.querySelector('.q').textContent=quadOf(q);refresh(false)};
+$('#rows').onclick=e=>{const id=e.target.dataset.del;if(!id)return;if(pts.length<=1){$('#pmsg').textContent='Mantenha ao menos um ponto.';return}pts=pts.filter(o=>o.id!=id);rows();refresh(true)};
+$('#add').onclick=()=>{if(pts.length>=12){$('#pmsg').textContent='Limite de 12 pontos.';return}pts.push({id:++uid,n:nextName(),x:0,y:0,t0:performance.now()});rows();refresh(true)};
+/* ===== Calculadora ===== */
+function selects(){const m=$('#mod').value,n=NEED[m];const ids=pts.map(q=>q.id);sel=sel.filter(id=>ids.includes(id));while(sel.length<3)sel.push(ids[sel.length%ids.length]);
+$('#sels').innerHTML=Array.from({length:n},(_,i)=>`<select data-i="${i}">${pts.map(q=>`<option value="${q.id}" ${q.id==sel[i]?'selected':''}>${q.n}</option>`).join('')}</select>`).join('')}
+$('#sels').onchange=e=>{sel[+e.target.dataset.i]=+e.target.value;calc()};
+$('#mod').onchange=()=>{selects();calc()};
+$$('.seg button').forEach(b=>b.onclick=()=>{mode=b.dataset.m;$$('.seg button').forEach(x=>x.classList.toggle('on',x==b));calc()});
+function calc(){const m=$('#mod').value,n=NEED[m],P=sel.slice(0,n).map(id=>pts.find(q=>q.id==id));const o=$('#cout');ov=null;
+if(P.some(q=>!q)||pts.length<n&&false){o.innerHTML='<p class="msg">Selecione pontos válidos.</p>'}else{
+const r=C[m](...P);if(r.err){o.innerHTML=`<p class="msg">${r.err}</p>`}else{ov=r.ov;const L=mode=='trad'?r.trad:r.vis;o.innerHTML=`<div class="out">${L.map(l=>`<p>${l}</p>`).join('')}</div><div class="res">${r.res}</div>`+(mode=='vis'?'<p style="color:var(--mut);font-size:13px">O desenho em laranja está no plano ao lado.</p>':'')}}
+draw()}
+function refresh(re){if(re){selects()}calc();exSync()}
+/* ===== Exercícios ===== */
+const BANK=[
+['Lista 2 · Q1','Determine a distância entre A(2, 3) e B(6, 6).','dist',[[2,3],[6,6]]],
+['Lista 2 · Q2','Calcule a distância do ponto P(−5, 12) até a origem O(0, 0).','dist',[[-5,12],[0,0]]],
+['Lista 2 · Q7','Determine o ponto médio M do segmento de extremidades A(−2, 4) e B(6, 8).','mid',[[-2,4],[6,8]]],
+['Lista 2 · Q8','Calcule o ponto médio M do segmento com A(−1/2, 3) e B(5/2, −1).','mid',[[-.5,3],[2.5,-1]]],
+['Lista 2 · Q12','Um diâmetro tem extremidades A(−3, 1) e B(5, 7). Determine o centro C da circunferência.','mid',[[-3,1],[5,7]]],
+['Lista 2 · Q13','Verifique (Sarrus) se A(1, 2), B(3, 6) e C(5, 10) estão alinhados.','align',[[1,2],[3,6],[5,10]]],
+['Lista 2 · Q16','Os pontos A(0, 0), B(4, 1) e C(2, 5) formam triângulo? Calcule a área.','area',[[0,0],[4,1],[2,5]]],
+['Slides · Baricentro','Determine o baricentro G do triângulo A(1, 6), B(0, 0) e C(4, 2).','bary',[[1,6],[0,0],[4,2]]]];
+let exs=BANK.map(([s,t,k,P])=>({s,t,k,P:P.map((c,i)=>({n:'ABC'[i],x:c[0],y:c[1]}))}));let cur=0;
+const KT={dist:'num',area:'num',mid:'pt',bary:'pt',align:'bool'};
+function exList(){$('#exs').innerHTML=exs.map((e,i)=>`<option value="${i}" ${i==cur?'selected':''}>${e.s}</option>`).join('');exShow()}
+function exShow(){const e=exs[cur],t=KT[e.k];$('#exq').innerHTML=`<p style="font-family:inherit;font-size:16px">${e.t}</p>`;
+$('#exin').innerHTML=t=='bool'?'<select id="ans"><option value="">Escolha…</option><option value="s">Sim, alinhados</option><option value="n">Não alinhados</option></select>':`<input id="ans" placeholder="${t=='pt'?'ex.: (1; 2,5)':'ex.: 5 ou 3√2'}" inputmode="text">`;$('#exfb').innerHTML=''}
+$('#exs').onchange=e=>{cur=+e.target.value;exShow()};
+function exSync(){}
+const pn=s=>{s=String(s).replace(/\s/g,'').replace(',','.');let m=s.match(/^(-?\d*\.?\d*)√(\d+\.?\d*)$/);if(m){const a=m[1]===''?1:m[1]==='-'?-1:+m[1];return a*Math.sqrt(+m[2])}m=s.match(/^(-?\d+\.?\d*)\/(\d+\.?\d*)$/);if(m)return+m[1]/+m[2];return s===''?NaN:Number(s)};
+const pp=s=>{s=s.replace(/[()\s]/g,'');const parts=s.includes(';')?s.split(';'):s.split(',');return parts.length==2?parts.map(x=>pn(x.replace(',','.'))):[NaN,NaN]};
+function steps(e){const r=C[e.k](...e.P);return`<div class="out">${r.trad.map(l=>`<p>${l}</p>`).join('')}</div><div class="res">${r.res}</div>`}
+$('#chk').onclick=()=>{const e=exs[cur],r=C[e.k](...e.P),t=KT[e.k],a=$('#ans').value,fb=$('#exfb');let ok=false,why='';
+if(t=='bool'){if(!a){fb.innerHTML='<div class="fb no">Escolha uma opção antes de verificar.</div>';return}ok=(a=='s')==r.val;why='Calcule o determinante D. Alinhados somente se D = 0.'}
+else if(t=='num'){const v=pn(a);if(isNaN(v)){fb.innerHTML='<div class="fb no">Entrada inválida. Digite um número (ex.: 5, 3,5 ou 3√2).</div>';return}ok=Math.abs(v-r.val)<0.01;
+if(!ok){const[A,B]=e.P;if(e.k=='dist'){const dx=B.x-A.x,dy=B.y-A.y;why=Math.abs(v-(dx*dx+dy*dy))<.01?'Esse valor é d². Falta extrair a raiz quadrada.':Math.abs(v-(Math.abs(dx)+Math.abs(dy)))<.01?'Você somou as diferenças. Use Pitágoras: d = √(Δx² + Δy²).':'Reveja a substituição: Δx = xB − xA e Δy = yB − yA.'}else why=Math.abs(v-2*r.val)<.01?'Você esqueceu o fator 1/2 da fórmula.':v<0?'A área usa o módulo do determinante, nunca é negativa.':'Reveja o determinante D (Sarrus) e depois A = ½·|D|.'}}
+else{const v=pp(a);if(v.some(isNaN)){fb.innerHTML='<div class="fb no">Entrada inválida. Digite o par como (x; y), ex.: (1; 2,5).</div>';return}ok=Math.abs(v[0]-r.val[0])<.01&&Math.abs(v[1]-r.val[1])<.01;
+if(!ok){const d=e.k=='mid'?2:3;why=Math.abs(v[0]-r.val[0]*d)<.01&&Math.abs(v[1]-r.val[1]*d)<.01?`Você somou as coordenadas e esqueceu de dividir por ${d}.`:'Reveja: some as abscissas, some as ordenadas e divida cada soma pelo número de pontos.'}}
+fb.innerHTML=ok?'<div class="fb ok">✔ Correto! Parabéns.</div>':`<div class="fb no">✘ Resposta incorreta. ${why}</div><p style="font-size:14px;color:var(--mut)">Resposta correta: ${r.res.replace(/<[^>]+>/g,'')}</p>`+steps(e)};
+$('#sol').onclick=()=>{$('#exfb').innerHTML=steps(exs[cur])};
+$('#onp').onclick=()=>{const e=exs[cur];pts=e.P.map(q=>({id:++uid,...q,t0:performance.now()}));rows();fit();sel=pts.map(q=>q.id);$('#mod').value=e.k;selects();mode='vis';$$('.seg button').forEach(b=>b.classList.toggle('on',b.dataset.m=='vis'));calc();tab('calc')};
+$('#cmk').onclick=()=>{const k=$('#ck').value,n=NEED[k];if(pts.length<n){$('#exfb').innerHTML=`<div class="fb no">Adicione pelo menos ${n} pontos no plano.</div>`;return}
+const P=pts.slice(0,n).map(q=>({n:q.n,x:q.x,y:q.y}));const names=P.map(q=>`${q.n}(${fmt(q.x)}, ${fmt(q.y)})`).join(', ');
+const T={dist:'Calcule a distância entre',mid:'Determine o ponto médio entre',bary:'Determine o baricentro de',align:'Verifique se estão alinhados:',area:'Calcule a área do triângulo de vértices'};
+exs.push({s:'Personalizado '+(exs.length-BANK.length+1),t:`${T[k]} ${names}.`,k,P});cur=exs.length-1;exList()};
+/* ===== Navegação ===== */
+function tab(t){$$('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t==t));$$('.tab').forEach(x=>x.classList.toggle('on',x.id=='t-'+t))}
+$$('.tabs button').forEach(b=>b.onclick=()=>tab(b.dataset.t));
+$$('[data-go]').forEach(b=>b.onclick=()=>{tab(b.dataset.go);$('#ws').scrollIntoView({behavior:'smooth'})});
+rows();selects();exList();calc();
+</script>
+</body>
+</html>
